@@ -7,3 +7,13 @@ function seccionChange() {
         }
     });
 }
+
+function gradoChange() {
+    var idNivel = $('select[id=nivel]').val();
+    $('#grado').empty();
+    grados.forEach(function (grado) {
+        if (grado['nivel_id'] == idNivel) {
+            $('#grado').append('<option value=' + grado['id'] + '>' + grado['name'] + '</option>')
+        }
+    });
+}

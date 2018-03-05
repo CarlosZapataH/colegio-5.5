@@ -30,5 +30,8 @@ Route::get('/asistencia/search', 'AsistenciaController@search')->name('asistenci
 Route::get('/asistencia', 'AsistenciaController@index')->name('asistencias.index');
 Route::post('/asistencia', 'AsistenciaController@store');
 
+Route::get('/redirect', 'SocialController@redirect');
+Route::get('/callback', 'SocialController@callback');
+
 
 

@@ -20,9 +20,6 @@
             <div class="form-group">
                 <label for="grado">Grado</label>
                 <select class="form-control" name="grado" id="grado">
-                    @foreach ($grados as $grado)
-                        <option value="{{$grado->id}}">{{$grado->name}}</option>
-                    @endforeach
                 </select>
             </div>
 
@@ -31,17 +28,23 @@
                 <select class="form-control" name="seccion" id="seccion">
                 </select>
             </div>
-            <button type="button" id="alumno_search" class="btn btn-success btn-lg btn-block">Buscar</button>
             <hr>
         </div>
         <div class="col-md-8">
-            <h4>Alumnos: <small class="text-muted">Seleccionar los alumnos asistidos.</small></h4>
+            <h4>Alumnos:
+                <small class="text-muted">Seleccionar los alumnos asistidos.</small>
+            </h4>
+            @if (session('alert'))
+                <div class="alert alert-warning">
+                    {{ session('alert') }}
+                </div>
+            @endif
             <form method="POST" action="{{ url('asistencia/') }}">
                 {{ csrf_field() }}
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">Casilla</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">DNI</th>
                     </tr>
@@ -60,14 +63,26 @@
     <script src="{{asset('js/ajax-alumno.js')}}"></script>
     <script>
         var secciones = @json($secciones);
-        seccionChange();
-        alumnoSearch();
+        var grados = @json($grados);
+
+        window.onload = function () {
+            gradoChange();
+            seccionChange();
+            alumnoSearch();
+        };
+
+        $("#nivel").change(function () {
+            gradoChange();
+            seccionChange();
+            alumnoSearch();
+        });
 
         $("#grado").change(function () {
             seccionChange();
+            alumnoSearch();
         });
 
-        $("#alumno_search").click(function () {
+        $("#seccion").change(function () {
             alumnoSearch();
         });
     </script>

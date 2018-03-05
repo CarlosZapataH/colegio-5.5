@@ -11,9 +11,15 @@ function alumnoSearch() {
         success: function (response) {
             $('#alumnos_table').empty();
             response.forEach(function (alumno) {
+                var casilla = '';
+                if (alumno['status'] == null) {
+                    casilla = '<input type="checkbox" name="asistencia[]" value="' + alumno['id'] + '">'
+                } else {
+                    casilla = '<span class="badge badge-success">Asistió</span>'
+                }
                 $('#alumnos_table').append('<tr>' +
-                    '<td> <input type="checkbox" name="asistencia[]" value="' + alumno['alumno_id'] + '"> </td>' +
-                    '<td>' + alumno['fullname'] + '</td>' +
+                    '<td>' + casilla + '</td>' +
+                    '<td>' + alumno['full_name'] + '</td>' +
                     '<td>' + alumno['dni'] + '</td>' +
                     '</tr>');
             });
@@ -36,7 +42,7 @@ function assistanceSearch() {
             $('#alumnos_table').empty();
             response.forEach(function (alumno) {
                 $('#alumnos_table').append('<tr>' +
-                    '<td>' + alumno['fullname'] + '</td>' +
+                    '<td>' + alumno['full_name'] + '</td>' +
                     '<td>' + alumno['dni'] + '</td>' +
                     '<td>' + alumno['created_at'] + '</td>' +
                     '</tr>');

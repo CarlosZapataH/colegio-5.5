@@ -18,7 +18,7 @@
             <tbody>
             @foreach ($alumnos as $alumno)
                 <tr>
-                    <td>{{$alumno->fullname}}</td>
+                    <td>{{$alumno->full_name}}</td>
                     <td>{{$alumno->dni}}</td>
                     <td>
                         <span>Null</span>

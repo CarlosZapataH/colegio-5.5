@@ -33,6 +33,7 @@
             {!! $errors->first('password','<div class="invalid-feedback">:message</div>') !!}
         </div>
         <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
+        <a href="redirect">facebook</a>
         <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
     </form>
     <script src="{{asset('js/jquery-3.3.1.min.js')}}"></script>

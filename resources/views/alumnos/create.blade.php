@@ -35,20 +35,10 @@
                     @endif
                 </div>
                 <div class="form-group">
-                    <input type="tel" class="form-control @if ($errors->has('telefono_alumno')) is-invalid @endif"
-                           name="telefono_alumno" id="telefono_alumno" value="{{ old('telefono_alumno') }}"
-                           placeholder="Telefono/celular">
-                    @if ($errors->has('telefono_alumno'))
-                        <div class="invalid-feedback">{{ $errors->first('telefono_alumno') }}</div>
-                    @endif
-                </div>
-                <div class="form-group">
-                    <input type="local" class="form-control @if ($errors->has('direccion_alumno')) is-invalid @endif"
-                           name="direccion_alumno" id="direccion_alumno" value="{{ old('direccion_alumno') }}"
-                           placeholder="Dirección">
-                    @if ($errors->has('direccion_alumno'))
-                        <div class="invalid-feedback">{{ $errors->first('direccion_alumno') }}</div>
-                    @endif
+                    <input type="local" class="form-control @if ($errors->has('email_alumno')) is-invalid @endif"
+                           name="email_alumno" id="email_alumno" value="{{ old('email_alumno') }}"
+                           placeholder="Email">
+                    {!! $errors->first('email_alumno','<div class="invalid-feedback">:message</div>') !!}
                 </div>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -93,6 +83,14 @@
                     @endif
                 </div>
                 <div class="form-group">
+                    <input type="text" class="form-control @if ($errors->has('parent_dni')) is-invalid @endif"
+                           name="parent_dni" id="parent_dni" value="{{ old('parent_dni') }}"
+                           placeholder="DNI">
+                    @if ($errors->has('parent_dni'))
+                        <div class="invalid-feedback">{{ $errors->first('parent_dni') }}</div>
+                    @endif
+                </div>
+                <div class="form-group">
                     <input type="text" class="form-control @if ($errors->has('parent_email')) is-invalid @endif"
                            name="parent_email" id="parent_email" value="{{ old('parent_email') }}"
                            placeholder="Correo Electronico">
@@ -122,9 +120,9 @@
                     <div class="form-group col-md-6">
                         <label for="grado">Grado</label>
                         <select class="form-control" name="grado" id="grado">
-                            @foreach ($grado as $gr)
-                                <option value="{{$gr->id}}">{{$gr->name}}</option>
-                            @endforeach
+                            {{--@foreach ($grado as $gr)--}}
+                                {{--<option value="{{$gr->id}}">{{$gr->name}}</option>--}}
+                            {{--@endforeach--}}
                         </select>
                     </div>
 
@@ -145,9 +143,18 @@
     <script src="{{asset('js/combos.js')}}"></script>
     <script>
         var secciones = @json($seccion);
+        var grados = @json($grado);
+
         window.onload = function () {
+            gradoChange();
             seccionChange();
         };
+
+        $("#nivel").change(function () {
+            gradoChange();
+            seccionChange();
+        });
+
         $("#grado").change(function () {
             seccionChange();
         });

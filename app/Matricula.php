@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Matricula extends Model
 {
-    protected $table = 'matricula';
-
+    //
     protected $fillable = [
+        'student_id',
+        'parent_id',
+        'nivel_id',
         'grado_id',
         'seccion_id',
-        'alumno_id',
-        'nivel_id',
-        'apoderado_id',
     ];
 }

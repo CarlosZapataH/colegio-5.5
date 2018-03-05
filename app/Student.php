@@ -4,16 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Apoderado extends Model
+class Student extends Model
 {
-    protected $table = 'parents';
-
+    //
     protected $fillable = [
         'name',
+        'last_name',
+        'full_name',
+        'sex',
         'dni',
-        'phone',
         'email',
-        'address',
-
+        'birth_date',
     ];
 }

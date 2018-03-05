@@ -36,7 +36,9 @@
                 <label for="assistance_date">Fecha</label>
                 <input type="date" class="form-control" id="assistance_date" name="assistance_date">
             </div>
-            <button type="button" id="assistance_search" class="btn btn-success btn-lg btn-block">Buscar</button>
+            <button type="button" id="assistance_search" onclick="assistanceSearch();"
+                    class="btn btn-success btn-lg btn-block">Buscar
+            </button>
             <hr>
         </div>
         <div class="col-md-8">
@@ -61,15 +63,23 @@
     <script src="{{asset('js/ajax-alumno.js')}}"></script>
     <script>
         var secciones = @json($secciones);
+        var grados = @json($grados);
+        gradoChange();
         seccionChange();
         assistanceSearch();
 
-        $("#grado").change(function () {
+        window.onload = function () {
+            gradoChange();
+            seccionChange();
+        };
+
+        $("#nivel").change(function () {
+            gradoChange();
             seccionChange();
         });
 
-        $("#assistance_search").click(function () {
-            assistanceSearch();
+        $("#grado").change(function () {
+            seccionChange();
         });
     </script>
 @endsection

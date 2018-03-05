@@ -2,60 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Asistencia;
+use App\Http\Contracts\IAsistencia;
+use App\Http\Contracts\IGrado;
+use App\Http\Contracts\INivel;
+use App\Http\Contracts\Iseccion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AsistenciaController extends Controller
 {
-    public function __construct()
+    protected $IAsistencia;
+
+    protected $INivel;
+
+    protected $IGrado;
+
+    protected $ISeccion;
+
+    public function __construct(IAsistencia $IAsistencia, INivel $INivel, IGrado $IGrado, Iseccion $ISeccion)
     {
+        $this->IAsistencia = $IAsistencia;
+        $this->INivel = $INivel;
+        $this->IGrado = $IGrado;
+        $this->ISeccion = $ISeccion;
+
         $this->middleware('auth');
     }
 
     public function index()
     {
-        $niveles = DB::table('nivel')->get();
-        $grados = DB::table('grado')->get();
-        $secciones = DB::table('seccion')->get();
+        $niveles = $this->INivel->getNiveles();
+        $grados = $this->IGrado->getGrados();
+        $secciones = $this->ISeccion->getSecciones();
 
         return view('asistencias.index', compact('niveles', 'grados', 'secciones'));
     }
 
     public function store(Request $request)
     {
-        config(['app.timezone' => 'America/Chicago']);
-        for ($i = 0; $i < count($request['asistencia']); $i++) {
-            Asistencia::create([
-                'estado' => 1,
-                'alumno_id' => $request['asistencia'][$i],
-            ]);
+        $data = [];
+        if ($request['asistencia']) {
+            for ($i = 0; $i < count($request['asistencia']); $i++) {
+                $data[] = [
+                    'status' => 1,
+                    'student_id' => $request['asistencia'][$i],
+                    'created_at' => date('Y-m-d H:i:s'),
+                ];
+            }
+            $this->IAsistencia->storeAsintencia($data);
+
+            return redirect()->route('asistencias.index');
         }
 
-        return redirect()->route('asistencias.index');
+        return redirect()->route('asistencias.index')->with('alert', '¡Se necesita seleccionar a un alumno!');
     }
 
     public function reporte()
     {
-        $niveles = DB::table('nivel')->get();
-        $grados = DB::table('grado')->get();
-        $secciones = DB::table('seccion')->get();
+        $niveles = $this->INivel->getNiveles();
+        $grados = $this->IGrado->getGrados();
+        $secciones = $this->ISeccion->getSecciones();
 
         return view('asistencias.reporte', compact('niveles', 'grados', 'secciones'));
     }
 
     public function search(Request $request)
     {
-        $alumnos = DB::table('alumno')
-            ->select('fullname', 'dni', 'asistencia.created_at')
-            ->leftJoin('matricula', 'alumno.id', '=', 'matricula.alumno_id')
-            ->leftJoin('asistencia', 'alumno.id', '=', 'asistencia.alumno_id')
-            ->where([
-                ['nivel_id', '=', $request['nivel_id']],
-                ['grado_id', '=', $request['grado_id']],
-                ['seccion_id', '=', $request['seccion_id']],
-                ['asistencia.created_at', 'like', "%{$request['assistance_date']}%"],
-            ])->get();
+        $alumnos = $this->IAsistencia->searchAsistencia($request);
 
         return response()->json($alumnos);
     }
